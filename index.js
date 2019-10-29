@@ -31,7 +31,7 @@ readInterface.on('line', function (line) {
     if (line.startsWith('diff --git')) {
         if (patchNum) {
             console.log(`Creating patch ${patchNum} (${patchPath})`);
-            fs.writeFileSync(patchPath, patchContent.join('\n'));
+            fs.writeFileSync(patchPath, `${patchContent.join('\n')}\n`);
             patchContent = [];
         }
         patchNum++;
@@ -40,7 +40,7 @@ readInterface.on('line', function (line) {
         const dir = path.parse(pathMatches[1]).dir;
         fs.mkdirSync(dir, { recursive: true });
         patchPath = `${pathMatches[1]}.patch`;
-
+        patchContent.push(line);
     } else {
         if (patchNum) {
             patchContent.push(line);
